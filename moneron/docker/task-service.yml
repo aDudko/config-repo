@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: TASK-SERVICE
+  rabbitmq:
+    host: rabbitmq
+    port: '5672'
+    username: guest
+    password: guest
+  boot:
+    message: Task service is UP!
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/moneron
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+
+resilience4j:
+  retry:
+    instances:
+      TASK-SERVICE:
+        max-attempts: '3'
+        waitDuration: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    sampling:
+      probability: '1.0'
+
+logging:
+  level:
+    org:
+      springframework:
+        web: ERROR
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
